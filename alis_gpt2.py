@@ -8,7 +8,7 @@ def flatten(l):
     return list(set([a for b in l for a in b]))
 
 class Translate():
-    subscription_key = '3ee4b7444e6c45bebb405e3980c95d84'
+    subscription_key = '****'
     endpoint = 'https://api.cognitive.microsofttranslator.com'
     headers = {
         'Ocp-Apim-Subscription-Key': subscription_key,
