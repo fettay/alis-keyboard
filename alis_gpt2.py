@@ -1,3 +1,4 @@
+import uuid
 import spacy
 import requests
 from transformers import AutoTokenizer, AutoModelWithLMHead
@@ -47,11 +48,11 @@ class Translate():
 
 class ChatGeneratorFR():
     def __init__(self):
-        self.step = 0
         self.translator = Translate()
         self.tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
         self.model = AutoModelWithLMHead.from_pretrained("microsoft/DialoGPT-large")
         self.nlp = spacy.load('fr_core_news_lg')
+        self.chat_history_ids = None
 
     def get_output_chat(self, input_user):
         input_user_en = self.translator.get_en_from_fr(input_user)
@@ -59,8 +60,11 @@ class ChatGeneratorFR():
             input_user_en + self.tokenizer.eos_token, return_tensors='pt')
 
         # append the new user input tokens to the chat history
-        bot_input_ids = torch.cat(
-            [chat_history_ids, new_user_input_ids], dim=-1) if self.step > 0 else new_user_input_ids
+        if self.chat_history_ids is None:
+            bot_input_ids = new_user_input_ids
+        else:
+            bot_input_ids = torch.cat(
+                [self.chat_history_ids, new_user_input_ids], dim=-1)
 
         # generated a response while limiting the total chat history to 1000 tokens, 
         sample_output_nucleus = self.model.generate(
@@ -77,12 +81,13 @@ class ChatGeneratorFR():
             res, skip_special_tokens=True) for res in sample_output_nucleus[:, bot_input_ids.shape[-1]:]]
         decoded_outputs_nucleus_fr = [self.translator.get_fr_from_en(res) for res in decoded_outputs_nucleus]
 
-        self.step += 1
+        self.chat_history_ids = sample_output_nucleus
+
         return decoded_outputs_nucleus_fr
     
     def get_words(self, input_user):
         sentences = self.get_output_chat(input_user)
-        sents = [nlp(sent) for sent in sentences]
+        sents = [self.nlp(sent) for sent in sentences]
         verbs = flatten([[w.lemma_ for w in sent if w.pos_ == 'VERB'] for sent in sents])
         nouns = flatten([[w.lemma_ for w in sent if w.pos_ == 'NOUN'] for sent in sents])
         pronouns = flatten([[w.lemma_ for w in sent if w.pos_ == 'PRON'] for sent in sents])
@@ -91,7 +96,7 @@ class ChatGeneratorFR():
                 'adverbs': adverbs}
         
     def restart_chat(self):
-        self.step = 0
+        self.chat_history_ids = None
 
 def main():
     chat = ChatGeneratorFR()

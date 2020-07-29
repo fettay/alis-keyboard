@@ -1,0 +1,10 @@
+{
+    "python.pythonPath": "/datadrive2/anaconda3/envs/LSP/bin/python",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.autoComplete.extraPaths": [
+        "/datadrive2/mascher/alis/alis-keyboard"],
+    "python.linting.pylintArgs": [
+        "--extension-pkg-whitelist=lxml"
+    ],
+}
