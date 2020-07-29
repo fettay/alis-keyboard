@@ -92,3 +92,9 @@ class ChatGeneratorFR():
         
     def restart_chat(self):
         self.step = 0
+
+def main():
+    chat = ChatGeneratorFR()
+    chat.restart_chat()
+    input_user = "Qu'est ce que tu veux manger?"
+    chat.get_words(input_user)
