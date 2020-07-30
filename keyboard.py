@@ -100,7 +100,7 @@ class Keyboard:
                         borderwidth = '4',
                         foreground = 'black')
         for i, sentence in enumerate(self.top_k_sentences):
-            reco0 = ttk.Button(self.key, textvariable=self.top_k_sentences[i] , width = 24,
+            reco0 = ttk.Button(self.key, textvariable=self.top_k_sentences[i] , width = 36,
                                 command = self.press_reco_sentence(i), style='Reco.TButton')
             reco0.grid(row = FIRST_ROW - i - 1, column = 10, pady = 15, ipadx = 5 , ipady = 10, columnspan=4)
         

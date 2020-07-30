@@ -75,7 +75,7 @@ def input_callback():
 
 speech_var = tk.StringVar()
 speech_entry = ttk.Entry(key,state= 'readonly',textvariable = speech_var)
-speech_entry.grid(row=0, rowspan=1, columnspan = 2, column=2)
+speech_entry.grid(row=0, rowspan=1, columnspan = 5, column=2, ipadx=30)
 tk.Button(key, 
           text='Listen to someone', 
           command=input_callback).grid(row=0, column=0, sticky=tk.W, pady=4, columnspan=2)
