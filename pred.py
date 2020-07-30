@@ -51,8 +51,8 @@ class DecoderRNN(nn.Module):
 class NextWordPredictor:
 
     def __init__(self, encoder_path, decoder_path, word2vec_bin):
-        self.encoder = torch.load(encoder_path).to('cpu')
-        self.decoder = torch.load(decoder_path).to('cpu')
+        self.encoder = torch.load(encoder_path, map_location=torch.device('cpu'))
+        self.decoder = torch.load(decoder_path, map_location=torch.device('cpu'))
         self.embedding_model = word2vec.load(word2vec_bin)
     
     def tokenize(self, sentence):

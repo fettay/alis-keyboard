@@ -88,7 +88,7 @@ class ChatGeneratorFR():
     
     def get_words(self, input_user):
         sentences = self.get_output_chat(input_user)
-        sents = [self.nlp(sent) for sent in sentences]
+        sents = [self.nlp(sent) for sent in sentences if sent is not None]
         verbs = flatten([[w.lemma_ for w in sent if w.pos_ == 'VERB'] for sent in sents])
         nouns = flatten([[w.lemma_ for w in sent if w.pos_ == 'NOUN'] for sent in sents])
         pronouns = flatten([[w.lemma_ for w in sent if w.pos_ == 'PRON'] for sent in sents])
