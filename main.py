@@ -21,8 +21,8 @@ key.configure(bg="#2C3E50")
 
 # Size window size
 key.geometry('1010x250')         # normal size
-key.maxsize(width=2000, height=1000)      # maximum size
-key.minsize(width= 2000 , height = 1000)     # minimum size
+key.maxsize(width=1500, height=750)      # maximum size
+key.minsize(width= 1500 , height = 750)     # minimum size
 # end window size
 
 
@@ -53,7 +53,6 @@ keyboard.set_up_keyboard()
 
 def input_callback():
     value = speech_to_text.recognize()
-    # value = "Salut ça va ?"
     speech_var.set(value)
     keyboard.last_input = value
     keyboard.new_sentence(value)
@@ -63,10 +62,14 @@ def input_callback():
         res = chat.get_words(value)
         reco = res['sentences']
         nouns = res['nouns']
+        adv = res['adverbs']
         for i, var in enumerate(keyboard.top_k_sentences):
             var.set(reco[i])
 
-        for but, word in zip(keyboard.top_k_words[5:], nouns):
+        for but, word in zip(keyboard.top_k_words[10 - len(nouns):10], nouns):
+            but.set(word)
+
+        for but, word in zip(keyboard.top_k_words[10:], adv):
             but.set(word)
 
 

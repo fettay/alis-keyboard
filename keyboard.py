@@ -6,7 +6,7 @@ from tkinter import ttk
 import tkinter as tk
 
 
-FIRST_ROW = 4
+FIRST_ROW = 5
 ENTER = "Enter"
 
 class Keyboard:
@@ -20,8 +20,8 @@ class Keyboard:
         self.last_input = None
         self.predictor = predictor
         self.speech_to_text = speech_to_text
-        self.top_k_words = [tk.StringVar(value='') for i in range(10)]
-        self.top_k_sentences = [tk.StringVar(value='') for i in range(2)]
+        self.top_k_words = [tk.StringVar(value='') for i in range(15)]
+        self.top_k_sentences = [tk.StringVar(value='') for i in range(3)]
 
     def press(self, num):
         self.exp = self.exp + str(num)
@@ -73,7 +73,7 @@ class Keyboard:
         
     def update_words(self, last_word=None):
         next_words, hidden = self.predictor.predict_next_word(self.prev_hidden, prev_word=last_word)
-        for but, word in zip(self.top_k_words[:5], next_words):
+        for but, word in zip(self.top_k_words, next_words):
             if word == self.predictor.EOS:
                 word = ENTER
             
@@ -87,12 +87,11 @@ class Keyboard:
                         borderwidth = '4',
                         foreground = 'black') 
         for i, word in enumerate(self.top_k_words):
-            half = len(self.top_k_words) // 2
-            row = 1 if i < half else 2
+            row = i // 5 
 
             reco0 = ttk.Button(self.key, textvariable=word , width = 12, command = self.press_reco(i),
                                 style='Reco.TButton')
-            reco0.grid(row = FIRST_ROW - 3 + row , column = 2 * (i % half), pady = 15, ipadx = 5 , ipady = 10, columnspan=2)
+            reco0.grid(row = FIRST_ROW - 3 + row , column = 2 * (i % 5), pady = 15, ipadx = 5 , ipady = 10, columnspan=2)
 
     def set_up_reco_sentences(self):
         style = ttk.Style() 
@@ -100,14 +99,10 @@ class Keyboard:
                         ('calibri', 12, 'bold'), 
                         borderwidth = '4',
                         foreground = 'black')
-        self.top_k_sentences[0].set('Comment tu vas ?')
-        self.top_k_sentences[1].set('Tu fais quoi ?') 
-        reco0 = ttk.Button(self.key, textvariable=self.top_k_sentences[0] , width = 24,
-                            command = self.press_reco_sentence(0), style='Reco.TButton')
-        reco0.grid(row = FIRST_ROW - 2, column = 10, pady = 15, ipadx = 5 , ipady = 10, columnspan=4)
-        reco1 = ttk.Button(self.key, textvariable=self.top_k_sentences[1] , width = 24,
-                           command = self.press_reco_sentence(1), style='Reco.TButton')
-        reco1.grid(row = FIRST_ROW - 1, column = 10, pady = 15, ipadx = 5 , ipady = 10, columnspan=4)
+        for i, sentence in enumerate(self.top_k_sentences):
+            reco0 = ttk.Button(self.key, textvariable=self.top_k_sentences[i] , width = 24,
+                                command = self.press_reco_sentence(i), style='Reco.TButton')
+            reco0.grid(row = FIRST_ROW - i - 1, column = 10, pady = 15, ipadx = 5 , ipady = 10, columnspan=4)
         
     def set_up_keyboard(self):
         q = ttk.Button(self.key,text = 'q' , width = 6, command = lambda : self.press('q'))
