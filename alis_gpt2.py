@@ -9,14 +9,15 @@ def flatten(l):
     return list(set([a for b in l for a in b]))
 
 class Translate():
-    subscription_key = '****'
-    endpoint = 'https://api.cognitive.microsofttranslator.com'
-    headers = {
-        'Ocp-Apim-Subscription-Key': subscription_key,
-        'Ocp-Apim-Subscription-Region': 'westeurope',
-        'Content-type': 'application/json',
-        'X-ClientTraceId': str(uuid.uuid4())
-    }
+    def __init__(self, azure_cog_key):
+        self.subscription_key = azure_cog_key
+        self.endpoint = 'https://api.cognitive.microsofttranslator.com'
+        self.headers = {
+            'Ocp-Apim-Subscription-Key': self.subscription_key,
+            'Ocp-Apim-Subscription-Region': 'westeurope',
+            'Content-type': 'application/json',
+            'X-ClientTraceId': str(uuid.uuid4())
+        }
 
     def get_en_from_fr(self, entry):
         body = [{
@@ -47,8 +48,8 @@ class Translate():
         return translation
 
 class ChatGeneratorFR():
-    def __init__(self):
-        self.translator = Translate()
+    def __init__(self, azure_cog_key):
+        self.translator = Translate(azure_cog_key)
         self.tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
         self.model = AutoModelWithLMHead.from_pretrained("microsoft/DialoGPT-large")
         self.nlp = spacy.load('fr_core_news_lg')
@@ -99,7 +100,8 @@ class ChatGeneratorFR():
         self.chat_history_ids = None
 
 def main():
-    chat = ChatGeneratorFR()
+    azure_cog_key = '<azure_cognitive_services_key>'
+    chat = ChatGeneratorFR(azure_cog_key)
     chat.restart_chat()
     input_user = "Qu'est ce que tu veux manger?"
     chat.get_words(input_user)
