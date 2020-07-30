@@ -141,3 +141,4 @@ cython_debug/
 
 models_backup/
 config.py
+.vscode/settings.json
