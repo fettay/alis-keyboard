@@ -21,7 +21,7 @@ class Keyboard:
         self.predictor = predictor
         self.speech_to_text = speech_to_text
         self.top_k_words = [tk.StringVar(value='') for i in range(10)]
-        self.top_k_sentences = [tk.StringVar(value='Phrase ici') for i in range(2)]
+        self.top_k_sentences = [tk.StringVar(value='') for i in range(2)]
 
     def press(self, num):
         self.exp = self.exp + str(num)
@@ -92,7 +92,9 @@ class Keyboard:
         style.configure('Reco.TButton', font = 
                         ('calibri', 12, 'bold'), 
                         borderwidth = '4',
-                        foreground = 'black') 
+                        foreground = 'black')
+        self.top_k_sentences[0].set('Comment tu vas ?')
+        self.top_k_sentences[1].set('Tu fais quoi ?') 
         reco0 = ttk.Button(self.key, textvariable=self.top_k_sentences[0] , width = 24,
                             command = self.press_reco_sentence(0), style='Reco.TButton')
         reco0.grid(row = FIRST_ROW - 2, column = 10, pady = 15, ipadx = 5 , ipady = 10, columnspan=4)

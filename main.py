@@ -6,8 +6,7 @@ from tkinter import ttk
 
 from pred import *
 from speechtotext import SpeechToText
-from config import TRANSLATE_KEY 
-from alis_gpt2 import ChatGeneratorFR
+from config import TRANSLATE_KEY, USE_CHAT
 
 
 logging.info('Starting the app')
@@ -37,8 +36,10 @@ logging.info('Loading next word predictor')
 predictor = NextWordPredictor('models/encoder.pkl', 'models/decoder.pkl',
                               'models/frWac_non_lem_no_postag_no_phrase_200_cbow_cut100.bin')
 
-logging.info('Loading next sentence predictor')
-chat = ChatGeneratorFR(TRANSLATE_KEY)
+if USE_CHAT:
+    from alis_gpt2 import ChatGeneratorFR
+    logging.info('Loading next sentence predictor')
+    chat = ChatGeneratorFR(TRANSLATE_KEY)
 
 logging.info('Instanciating speech to text instance')
 # Speech to text section
@@ -56,10 +57,11 @@ def input_callback():
     keyboard.last_input = value
     keyboard.new_sentence(value)
 
-    chat.restart_chat()
-    reco = chat.get_words(value)['sentences']
-    for i, var in enumerate(keyboard.top_k_sentences):
-        var.set(reco[i])
+    if USE_CHAT:
+        chat.restart_chat()
+        reco = chat.get_words(value)['sentences']
+        for i, var in enumerate(keyboard.top_k_sentences):
+            var.set(reco[i])
 
 
 speech_var = tk.StringVar()

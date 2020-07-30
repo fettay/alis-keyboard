@@ -106,6 +106,8 @@ class NextWordPredictor:
             return len(self.embedding_model.vectors) + 1
 
     def encode_sentence(self, sentence, max_length=50):
+        if sentence is None:
+            sentence = ""
         sentence = sentence.lower()
         with torch.no_grad():
             input_tensor = self.generate_input(sentence)
