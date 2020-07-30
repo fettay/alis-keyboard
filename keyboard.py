@@ -73,7 +73,7 @@ class Keyboard:
         
     def update_words(self, last_word=None):
         next_words, hidden = self.predictor.predict_next_word(self.prev_hidden, prev_word=last_word)
-        for but, word in zip(self.top_k_words, next_words):
+        for but, word in zip(self.top_k_words[5:], next_words):
             if word == self.predictor.EOS:
                 word = ENTER
             

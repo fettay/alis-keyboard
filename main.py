@@ -21,8 +21,8 @@ key.configure(bg="#2C3E50")
 
 # Size window size
 key.geometry('1010x250')         # normal size
-key.maxsize(width=1010, height=500)      # maximum size
-key.minsize(width= 1010 , height = 500)     # minimum size
+key.maxsize(width=2000, height=1000)      # maximum size
+key.minsize(width= 2000 , height = 1000)     # minimum size
 # end window size
 
 
@@ -40,6 +40,7 @@ if USE_CHAT:
     from alis_gpt2 import ChatGeneratorFR
     logging.info('Loading next sentence predictor')
     chat = ChatGeneratorFR(TRANSLATE_KEY)
+    chat.restart_chat()
 
 logging.info('Instanciating speech to text instance')
 # Speech to text section
@@ -59,9 +60,14 @@ def input_callback():
 
     if USE_CHAT:
         chat.restart_chat()
-        reco = chat.get_words(value)['sentences']
+        res = chat.get_words(value)
+        reco = res['sentences']
+        nouns = res['nouns']
         for i, var in enumerate(keyboard.top_k_sentences):
             var.set(reco[i])
+
+        for but, word in zip(keyboard.top_k_words[5:], nouns):
+            but.set(word)
 
 
 speech_var = tk.StringVar()

@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/datadrive2/anaconda3/envs/LSP/bin/python",
+    "python.pythonPath": "/Users/mascher/anaconda3/envs/alis/bin/python",
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "python.autoComplete.extraPaths": [
