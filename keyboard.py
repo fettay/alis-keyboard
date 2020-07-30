@@ -20,10 +20,9 @@ class Keyboard:
         self.last_input = None
         self.predictor = predictor
         self.speech_to_text = speech_to_text
-        self.top_k_words = [tk.StringVar() for i in range(10)]
-        for i in range(len(self.top_k_words)):
-            self.top_k_words[i].set('')
-    
+        self.top_k_words = [tk.StringVar(value='') for i in range(10)]
+        self.top_k_sentences = [tk.StringVar(value='Phrase ici') for i in range(2)]
+
     def press(self, num):
         self.exp = self.exp + str(num)
         self.equation.set(self.exp)
@@ -34,6 +33,13 @@ class Keyboard:
             self.exp = self.exp + word + " "
             self.equation.set(self.exp)
             self.update_words(word)
+        return press_reco_func
+
+    def press_reco_sentence(self, i):
+        def press_reco_func():
+            sentence = self.top_k_sentences[i].get()
+            self.exp = sentence
+            self.equation.set(self.exp)
         return press_reco_func
 
     def press_space(self):
@@ -80,6 +86,19 @@ class Keyboard:
             reco0 = ttk.Button(self.key, textvariable=word , width = 12, command = self.press_reco(i),
                                 style='Reco.TButton')
             reco0.grid(row = FIRST_ROW - 3 + row , column = 2 * (i % half), pady = 15, ipadx = 5 , ipady = 10, columnspan=2)
+
+    def set_up_reco_sentences(self):
+        style = ttk.Style() 
+        style.configure('Reco.TButton', font = 
+                        ('calibri', 12, 'bold'), 
+                        borderwidth = '4',
+                        foreground = 'black') 
+        reco0 = ttk.Button(self.key, textvariable=self.top_k_sentences[0] , width = 24,
+                            command = self.press_reco_sentence(0), style='Reco.TButton')
+        reco0.grid(row = FIRST_ROW - 2, column = 10, pady = 15, ipadx = 5 , ipady = 10, columnspan=4)
+        reco1 = ttk.Button(self.key, textvariable=self.top_k_sentences[1] , width = 24,
+                           command = self.press_reco_sentence(1), style='Reco.TButton')
+        reco1.grid(row = FIRST_ROW - 1, column = 10, pady = 15, ipadx = 5 , ipady = 10, columnspan=4)
         
     def set_up_keyboard(self):
         q = ttk.Button(self.key,text = 'Q' , width = 6, command = lambda : self.press('Q'))
@@ -262,3 +281,4 @@ class Keyboard:
         tap.grid(row = FIRST_ROW + 3 , column = 13 , ipadx = 20 , ipady = 10)
 
         self.set_up_reco()
+        self.set_up_reco_sentences()

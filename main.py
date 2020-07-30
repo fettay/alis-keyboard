@@ -4,6 +4,7 @@ from tkinter import ttk
 
 from pred import *
 from speechtotext import SpeechToText
+from config import SPEECH_KEY
 
 
 key = tk.Tk()              # key window name
@@ -30,7 +31,8 @@ Dis_entry.grid(row=1, rowspan= 1 , columnspan = 100, ipadx = 999 , ipady = 20)
 
 predictor = NextWordPredictor('models/encoder.pkl', 'models/decoder.pkl',
                               'models/frWac_non_lem_no_postag_no_phrase_200_cbow_cut100.bin')
-# predictor = None
+
+chat = ChatGeneratorFR(SPEECH_KEY)
 
 # Speech to text section
 speech_to_text = SpeechToText()
@@ -45,6 +47,12 @@ def input_callback():
     speech_var.set(value)
     keyboard.last_input = value
     keyboard.new_sentence(value)
+
+    chat.restart_chat()
+    reco = chat.get_words(value)['sentences']
+    for i, var in enumerate(keyboard.top_k_sentences):
+        var.set(reco[i])
+
 
 speech_var = tk.StringVar()
 speech_entry = ttk.Entry(key,state= 'readonly',textvariable = speech_var)

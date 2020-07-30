@@ -100,8 +100,14 @@ class ChatGeneratorFR():
         self.chat_history_ids = None
 
 def main():
-    azure_cog_key = '<azure_cognitive_services_key>'
+    from config import SPEECH_KEY
+    azure_cog_key = SPEECH_KEY
     chat = ChatGeneratorFR(azure_cog_key)
     chat.restart_chat()
     input_user = "Qu'est ce que tu veux manger?"
-    chat.get_words(input_user)
+    print(chat.get_words(input_user))
+
+
+if __name__ == "__main__":
+    main()
+
