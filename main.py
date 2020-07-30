@@ -34,7 +34,7 @@ Dis_entry.grid(row=1, rowspan= 1 , columnspan = 100, ipadx = 999 , ipady = 20)
 
 logging.info('Loading next word predictor')
 predictor = NextWordPredictor('models/encoder.pkl', 'models/decoder.pkl',
-                              'models/frWac_non_lem_no_postag_no_phrase_200_cbow_cut100.bin')
+                              'models/vocab.pkl')
 
 if USE_CHAT:
     from alis_gpt2 import ChatGeneratorFR
