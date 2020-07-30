@@ -6,4 +6,6 @@ Then you need to create a config.py file with:
 ```python
 SPEECH_KEY = '' # A key from azure cognitive services
 SPEECH_REGION = '' # The region of azure cognitive services
+TRANSLATE_KEY = '' # The key for azure translation service
+USE_CHAT = False # Whether to use sentence recommandation (slow)
 ```
