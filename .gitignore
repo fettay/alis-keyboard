@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -137,6 +138,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-models/
+
 models_backup/
 config.py
