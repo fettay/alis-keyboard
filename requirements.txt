@@ -1,4 +1,4 @@
 spacy==2.3.2
-transformers==3.0.2
+transformers==4.30.0
 torch==1.5.1
 https://github.com/explosion/spacy-models/releases/download/fr_core_news_lg-2.3.0/fr_core_news_lg-2.3.0.tar.gz
